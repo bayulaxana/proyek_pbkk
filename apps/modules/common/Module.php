@@ -16,6 +16,7 @@ class Module implements ModuleDefinitionInterface
             'ServiceLaundry\Common\Controllers\Web'      => __DIR__ . '/controllers',
             'ServiceLaundry\Common\Models\Web'           => __DIR__ . '/models',
             'ServiceLaundry\Common\Forms\Web'            => __DIR__ . '/forms',
+	    'ServiceLaundry\Common\Models\Web		 => __DIR__ . '/models,
         ]);
 
         $loader->register();
