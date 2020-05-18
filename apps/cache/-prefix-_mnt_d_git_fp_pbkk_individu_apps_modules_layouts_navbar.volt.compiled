@@ -1,0 +1,64 @@
+<!-- Header Content -->
+        <!-- Nav tabs -->
+        <nav class="navbar navbar-dark navbar-expand-lg fixed-top" style="font-size: 16px; background-color: #6878a0">
+            <?php if ($this->session->get('auth') && $this->session->get('auth')['role'] == 1) { ?>
+                <a class="nav-link text-light" href="<?= $this->url->get() ?>">Home</a>
+            <?php } elseif ($this->session->get('auth') && $this->session->get('auth')['role'] == 0) { ?>
+                <a class="nav-link text-light" href="<?= $this->url->get('dashboard/user') ?>">Home</a>
+            <?php } else { ?>
+                <a class="nav-link text-light" href="<?= $this->url->get('home') ?>">Home</a>
+            <?php } ?>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                <?php if ($this->session->get('auth')) { ?>
+                    <?php if ($this->session->get('auth')['role'] == 1) { ?>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="<?= $this->url->get('expense') ?>">Pengeluaran</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="<?= $this->url->get('goods') ?>">Barang</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="<?= $this->url->get('service') ?>">Service Laundry</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="<?= $this->url->get('order') ?>">Pesanan</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="<?= $this->url->get('pickup_delivery') ?>">Jasa Antar-Jemput</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="<?= $this->url->get('payment') ?>">Pembayaran</a>
+                        </li>
+                    <?php } else { ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pesanan</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="<?= $this->url->get('order/users') ?>">Tambah Pesanan</a>
+                                <a class="dropdown-item" href="<?= $this->url->get('/listorder') ?>">Daftar Pesanan</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="<?= $this->url->get('item') ?>">Item</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="<?= $this->url->get('history') ?>">Riwayat</a>
+                        </li>
+                    <?php } ?>
+                <?php } ?>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <?php if ($this->session->get('auth')) { ?>
+                        <?php $val = 'profile?id=' . $this->session->get('auth')['id']; ?>
+                        <a class="nav-link text-light" href="<?= $this->url->get($val) ?>">Selamat Datang, <span class="text-info"><?= $this->session->get('auth')['username'] ?></span></a>
+                        <a class="nav-link btn btn-danger" href="<?= $this->url->get('logout') ?>">Log Out</a>
+                    <?php } else { ?>
+                        <a class="nav-link text-light" href="<?= $this->url->get('login') ?>">Log In</a>
+                    <?php } ?>
+                </ul>
+            </div>
+        </nav>
+<!-- END Header Content -->

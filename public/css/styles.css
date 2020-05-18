@@ -58,17 +58,10 @@ body {
     z-index: 999;
 }
 
-.card.notif-block {
-    overflow-y: auto;
-    top: 20px;
-    position:absolute;
-    height:5vh;
-}
-
 
 .card.login-card {
     height:27vw;
-    margin-top: 12vw;
+    margin-top: 12vh;
     margin-left:20vw;
     width:50%;
     font-size: 1vw;

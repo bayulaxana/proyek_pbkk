@@ -29,8 +29,10 @@ $(document).ready(function(){
     $("#multi-items").click(function() {
         var wrapper = $('.item-fields');
         var wrapper1 = $('.type-fields');
-        $(wrapper).append("<div class='form-group'><input type='text' class='form-control' name='item_notes'></div>");
-        $(wrapper1).append("<div class='form-group'><input type='text' class='form-control' name='item_types'></div>");
+        var wrapper2 = $('.photos-fields');
+        $(wrapper).append("<div class='form-group'><input type='text' class='form-control' name='item_notes[]'></div>");
+        $(wrapper1).append("<div class='form-group'><input type='text' class='form-control' name='item_types[]'></div>");
+        $(wrapper2).append("<div class='form-group'><input type='file' class='form-control' name='item_photos[]'></div>")
     });
 
     //get val multi-tems
@@ -78,8 +80,10 @@ $(document).ready(function(){
     });
 
     //multi-select
-    $("#pilihan").on("change",function(){
-        values = $("#pilihan option:selected").attr("price");
+    $("#weight_total").on("change",function(){
+        values = parseInt($("#pilihan option:selected").attr("price"));
+        values1 = parseInt($("#weight_total").val());
+        values = values * values1;
         $('#order_total').val(values.toString());
     });
 

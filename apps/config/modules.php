@@ -1,17 +1,6 @@
 <?php
 
 return array(
-    'common' => [
-        'namespace'                     => 'ServiceLaundry\Common',
-        'webControllerNamespace'        => 'ServiceLaundry\Common\Controllers\Web',
-        'apiControllerNamespace'        => '',
-        'className'                     => 'ServiceLaundry\Common\Module',
-        'path'                          => APP_PATH . '/modules/dashboard/Module.php',
-        'defaultRouting'                => true,
-        'defaultController'             => 'Index',
-        'defaultAction'                 => 'index'
-    ],
-
     'dashboard' => [
         'namespace'                     => 'ServiceLaundry\Dashboard',
         'webControllerNamespace'        => 'ServiceLaundry\Dashboard\Controllers\Web',
@@ -30,7 +19,7 @@ return array(
         'className'                     => 'ServiceLaundry\Expense\Module',
         'path'                          => APP_PATH . '/modules/expense/Module.php',
         'defaultRouting'                => true,
-        'defaultController'             => 'Index',
+        'defaultController'             => 'Expense',
         'defaultAction'                 => 'index'
     ],
 
@@ -41,7 +30,7 @@ return array(
         'className'                     => 'ServiceLaundry\Order\Module',
         'path'                          => APP_PATH . '/modules/order/Module.php',
         'defaultRouting'                => true,
-        'defaultController'             => 'Index',
+        'defaultController'             => 'Order',
         'defaultAction'                 => 'index'
     ],
 
@@ -52,7 +41,7 @@ return array(
         'className'                     => 'ServiceLaundry\PickupDelivery\Module',
         'path'                          => APP_PATH . '/modules/pickup_delivery/Module.php',
         'defaultRouting'                => true,
-        'defaultController'             => 'Index',
+        'defaultController'             => 'PickupDelivery',
         'defaultAction'                 => 'index'
     ],
 
@@ -63,7 +52,7 @@ return array(
         'className'                     => 'ServiceLaundry\Goods\Module',
         'path'                          => APP_PATH . '/modules/goods/Module.php',
         'defaultRouting'                => true,
-        'defaultController'             => 'Index',
+        'defaultController'             => 'Goods',
         'defaultAction'                 => 'index'
     ]
 );

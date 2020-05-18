@@ -16,6 +16,7 @@ class Module implements ModuleDefinitionInterface
             'ServiceLaundry\Expense\Controllers\Web'        => __DIR__ . '/controllers',
             'ServiceLaundry\Expense\Models\Web'             => __DIR__ . '/models',
             'ServiceLaundry\Expense\Forms\Web'              => __DIR__ . '/form',
+            'ServiceLaundry\Common\Controllers'             => APP_PATH . '/controllers'
         ]);
 
         $loader->register();

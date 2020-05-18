@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+
+<link rel="shortcut icon" href="<?= $this->url->get('assets/favicon.ico') ?>" type="image/x-icon">
+<link rel="icon" href="<?= $this->url->get('assets/favicon.ico') ?>" type="image/x-icon">
+
+<link href="<?= $this->url->get('css/styles.css') ?>" rel="stylesheet">
+<link href="<?= $this->url->get('css/bootstrap.min.css') ?>" rel="stylesheet">
+<link id="css-main" href="<?= $this->url->get('css/codebase.min.css') ?>" rel="stylesheet">
+<link href="<?= $this->url->get('css/fontawesome.min.css') ?>" rel="stylesheet">
+<link href="<?= $this->url->get('css/bootstrap-select.css') ?>" rel="stylesheet">
+<link href="<?= $this->url->get('css/tagsinput.css') ?>" rel="stylesheet">
+<link href="<?= $this->url->get('css/Chart.css') ?>" rel="stylesheet">
+
+<script type="text/javascript" src="<?= $this->url->get('js/jquery-3.3.1.min.js') ?>"></script>
+<script type="text/javascript" src="<?= $this->url->get('js/bootstrap.bundle.min.js') ?>"></script>
+<script type="text/javascript" src="<?= $this->url->get('js/popper.js') ?>"></script>
+<script type="text/javascript" src="<?= $this->url->get('js/bootstrap-select.js') ?>"></script>
+<script type="text/javascript" src="<?= $this->url->get('js/tagsinput.js') ?>"></script>
+<script type="text/javascript" src="<?= $this->url->get('js/Chart.js') ?>"></script>
+<script type="text/javascript" src="<?= $this->url->get('js/javascript.js') ?>"></script>
+	<title>Kelola Barang</title>
+</head>
+<body>
+	<!-- Header Content -->
+        <!-- Nav tabs -->
+        <nav class="navbar navbar-dark navbar-expand-lg fixed-top" style="font-size: 16px; background-color: #6878a0">
+             <?php if ($this->session->get('auth') && $this->session->get('auth')['role'] == 1) { ?>
+                <a class="nav-link text-light" href="<?= $this->url->get() ?>">Home</a>
+            <?php } else { ?>
+                 <a class="nav-link text-light" href="<?= $this->url->get('home') ?>">Home</a>
+            <?php } ?>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                <?php if ($this->session->get('auth')) { ?>
+                    <?php if ($this->session->get('auth')['role'] == 1) { ?>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="<?= $this->url->get('expense') ?>">Pengeluaran</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="<?= $this->url->get('goods') ?>">Barang</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="<?= $this->url->get('service') ?>">Service Laundry</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="<?= $this->url->get('order') ?>">Pesanan</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="<?= $this->url->get('pickup_delivery') ?>">Jasa Antar-Jemput</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="<?= $this->url->get('payment') ?>">Pembayaran</a>
+                        </li>
+                    <?php } else { ?>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="<?= $this->url->get('order/users') ?>">Pesanan</a>
+                        </li>
+                    <?php } ?>
+                <?php } ?>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <?php if ($this->session->get('auth')) { ?>
+                        <?php $val = 'profile?id=' . $this->session->get('auth')['id']; ?>
+                        <a class="nav-link text-light" href="<?= $this->url->get($val) ?>">Selamat Datang, <span class="text-info"><?= $this->session->get('auth')['username'] ?></span></a>
+                        <a class="nav-link btn btn-danger" href="<?= $this->url->get('logout') ?>">Log Out</a>
+                    <?php } else { ?>
+                        <a class="nav-link text-light" href="<?= $this->url->get('login') ?>">Log In</a>
+                    <?php } ?>
+                </ul>
+            </div>
+        </nav>
+<!-- END Header Content -->
+	
+<div id="page-container" class="sidebar-inverse side-scroll page-header-fixed main-content-boxed">
+    <main id="main-container" style="padding-top: 5vw">
+        <div class="content" style="padding-top: 0">
+        <div id="hides" class="notif-block" style="height:5vh;  overflow-y: auto;"><?= $this->flashSession->output() ?></div>
+        <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-8"><h2>Kelola <b>Barang Laundry</b></h2></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6"></div>
+                <div class="col-sm-6">
+                    <a href="#tambahBarangModal" class="btn btn-success" data-toggle="modal"><i class="fa fa-plus"></i><span>Tambah Barang</span></a>
+                    <a id="multi-uwus" href="#hapusBarangModal" class="btn btn-danger" data-toggle="modal"><i class="fa fa-trash-o"></i><span>Hapus</span></a>						
+                </div>
+            </div>
+        </div>
+        <?php if ($page != null) { ?>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>No.</th>
+                        <th>Jenis Barang</th>
+                        <th>Harga per Unit</th>
+                        <th>Stock Barang</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php $i = 1; ?>
+                    <?php foreach ($page as $t) { ?>
+                        <tr>
+                            <td>
+                                <span class="custom-checkbox">
+                                    <input type="checkbox" id="checkbox1" name="options" value="<?= $t->getId() ?>">
+                                    <label for="checkbox1"></label>
+                                </span>
+                            </td>
+                            <td><?= $offset + $i ?></td>
+                            <td><?= $t->getGoodsName() ?></td>
+                            <td><?= $t->getUnitPrice() ?></td>
+                            <td><?= $t->getGoodStock() ?></td>
+                            <td>
+                                <!--change to button-->
+                                <a href="#editBarangModal<?= $t->getId() ?>" class="edit" data-toggle="modal" data-remote="<?= $this->url->get('edit/pickup_Expense?') ?>"><i class="fa fa-pencil" data-toggle="tooltip" title="Ubah" value="<?= $t->getId() ?>"></i></a>
+                            </td>
+                        </tr> 
+                    <?php $i = $i + 1; ?>
+                    <?php } ?>
+                </tbody>
+            </table>
+            <div class="text-center text-lg">
+                <a href='/goods' class="btn btn-info">First</a>
+                <?php if ($page_number - 1 >= 1) { ?>
+                <a href='/goods?page=<?= $page_number - 1 ?>' class="btn btn-info">Previous</a>
+                <?php } ?>
+                <?php if ($page_number + 1 <= $page_last) { ?>
+                <a href='/goods?page=<?= $page_number + 1 ?>' class="btn btn-info">Next</a>
+                <?php } ?>
+                <a href='/goods?page=<?= $page_last ?>' class="btn btn-info">Last</a>
+                <p class="text-success"><b>Anda berada di halaman <?= $page_number ?> dari <?= $page_last ?></b></p>
+            </div>
+            <?php } else { ?>
+                <h2 class="text-danger text-center">Tidak ada data yang dapat ditampilkan</h2>
+            <?php } ?>
+        </div>
+    <main>
+</div>
+
+<div id="tambahBarangModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="GoodsForm" action="add/goods" method="POST">
+                <div class="modal-header">						
+                    <h4 class="modal-title">Tambah Barang</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">									
+                    <div class="form-group">
+                        <label><b><?= $form->getLabel('goods_name') ?></b></label>
+                        <?= $form->render('goods_name') ?>
+                    </div>
+                    <div class="form-group">
+                        <label><b><?= $form->getLabel('unit_price') ?></b></label>
+                        <?= $form->render('unit_price') ?>
+                    </div>
+                    <div class="form-group">
+                        <label><b><?= $form->getLabel('good_stock') ?></b></label>
+                        <?= $form->render('good_stock') ?>
+                    </div>									
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Batal">
+                    <?= $form->render('Simpan') ?>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="hapusBarangModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="goods" method="POST">
+                <div class="modal-header">						
+                    <h4 class="modal-title">Hapus Barang</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">				
+                    <input type='hidden' value='' name='goods_id' id='goods_id'>
+                    <p>Apakah Anda yakin untuk menghapus data yang telah dipilih ?</p>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Batal">
+                    <input type="submit" class="btn btn-danger" value="Hapus">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<?php foreach ($page as $t) { ?>
+<div id="editBarangModal<?= $t->getId() ?>" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="update/goods" method="POST">
+                <div class="modal-header">						
+                    <h4 class="modal-title">Edit Barang</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="goods_id" name="goods_id" value="<?= $t->getId() ?>">
+                    <div class="form-group">
+                        <label><b>Nama Barang</b></label>
+                        <p><input type="text" class="form-control" name="goods_name" id="goods_name" value="<?= $t->getGoodsName() ?>"></p>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Harga per Unit</b></label>
+                        <p><input type="text" class="form-control" name="unit_price" id="unit_price" value="<?= $t->getUnitPrice() ?>"></p>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Stock Barang</b></label>
+                        <p><input type="text" class="form-control" name="good_stock" id="good_stock" value="<?= $t->getGoodStock() ?>"></p>
+                    </div>						
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Batal">
+                    <input type="submit" class="btn btn-success" id="Simpan" nama="Simpan" value="Simpan">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<?php } ?>
+
+	<div class="clearfix bottom-content">
+		<div class="row" style="position: relative; margin-top:10vh; width: 100%; color: white"> 
+			<div class="col-md-8">
+				<p style="padding-left: 2vw;">© Copy Right by Bella Septina. Created with<span>❤</span></p>
+			</div>
+			<div class="col-md-4">
+				<div class="row">
+				<div class="col-sm">
+                	<a type="button" class="text-light" href=""><i class="fa fa-globe" style="font-size:24px"></i>service.laundry.com</a><br>
+                </div>
+				<div class="col-sm">
+					<a type="button" class="text-light" href=""><i class="fa fa-facebook-square" style="font-size:24px"></i> Service Laundry Organizer</a><br>
+				</div>
+				</div>
+			</div>
+		</div> 
+	</div>
+</body>
+</html>

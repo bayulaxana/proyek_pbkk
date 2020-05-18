@@ -15,7 +15,9 @@ class Module implements ModuleDefinitionInterface
         $loader->registerNamespaces([
             'ServiceLaundry\Goods\Controllers\Web'      => __DIR__ . '/controllers',
             'ServiceLaundry\Goods\Models\Web'           => __DIR__ . '/models',
+            'ServiceLaundry\Goods\Views\Web'            => __DIR__ . '/views',
             'ServiceLaundry\Goods\Forms\Web'            => __DIR__ . '/form',
+            'ServiceLaundry\Common\Controllers'         => APP_PATH . '/controllers'
         ]);
 
         $loader->register();
