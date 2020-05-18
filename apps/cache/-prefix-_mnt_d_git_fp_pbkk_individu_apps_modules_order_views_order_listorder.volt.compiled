@@ -127,7 +127,7 @@
                             <td><?= $t['finish_date'] ?></td>
                             <td><?= $t['order_status'] ?></td>
                             <td>
-                                <a href="#lihatItemsModal" class="view" data-toggle="modal" ><i class="fa fa-eye" data-toggle="tooltip" title="Lihat"></i></a>
+                                <a href="#lihatItemsModal" class="view" data-toggle="modal" ><i class="fa fa-eye" data-toggle="tooltip" title="Lihat Detail Item"></i></a>
                                 <a href="#tambahNotesModal" class="add" data-toggle="modal" ><i class="fa fa-plus" data-toggle="tooltip" title="Tambah Catatan"></i></a>
                                 <a href="#editNotesModal" class="edit" data-toggle="modal" ><i class="fa fa-pencil" data-toggle="tooltip" title="Ubah Catatan"></i></a>
                                 <a href="#hapusNotesModal" class="delete" data-toggle="modal" ><i class="fa fa-trash-o" data-toggle="tooltip" title="Hapus Catatan"></i></a>

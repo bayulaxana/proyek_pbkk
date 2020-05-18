@@ -85,25 +85,25 @@ class UserOrderController extends SecureController
         $sql        = $temps->toArray();
 
         /*Pagination*/
-        
+
 
         
         /*
         * Get all items for every orders
         */
-        $detail_item    = array();
-        $i = 0;
-        foreach( $sql as $idx)
-        {
-            $query = $this
-                    ->modelsManager
-                    ->createQuery('SELECT item_type, item_details FROM ServiceLaundry\Order\Models\Web\Item AS Item , ServiceLaundry\Order\Models\Web\OrderItem AS OrderItem
-                                    WHERE Item.item_id = OrderItem.item_id 
-                                    AND OrderItem.order_id =' .$idx['Orders_order_id']);
-            $temp             = $query->execute();
-            $detail_item[$i]  = $temp->toArray();   
-            $i++;
-        }
+        // $detail_item    = array();
+        // $i = 0;
+        // foreach( $sql as $idx)
+        // {
+        //     $query = $this
+        //             ->modelsManager
+        //             ->createQuery("SELECT item_type, item_details FROM ServiceLaundry\Order\Models\Web\Item AS Item , ServiceLaundry\Order\Models\Web\OrderItem AS OrderItem
+        //                             WHERE Item.item_id = OrderItem.item_id 
+        //                             AND OrderItem.order_id =" .$idx['Orders_order_id']);
+        //     $temp             = $query->execute();
+        //     $detail_item[$i]  = $temp->toArray();   
+        //     $i++;
+        // }
 
         $this->view->page    = $sql;
         $this->view->details = $detail_item;

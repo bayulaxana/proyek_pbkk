@@ -66,7 +66,8 @@ CREATE TABLE Item(
 	item_id int not null identity(1,1) PRIMARY KEY,
 	user_id int FOREIGN KEY REFERENCES Users(user_id) ON DELETE CASCADE,
 	item_details text not null,
-	item_type varchar(10) not null
+	item_type varchar(10) not null,
+	item_photo varchar(100) null
 );
 
 CREATE TABLE Order_Item(

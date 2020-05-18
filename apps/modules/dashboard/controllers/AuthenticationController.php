@@ -4,6 +4,7 @@ namespace ServiceLaundry\Dashboard\Controllers\Web;
 
 use ServiceLaundry\Common\Controllers\SecureController;
 use ServiceLaundry\Dashboard\Forms\Web\LoginForm;
+use ServiceLaundry\Dashboard\Forms\Web\UserForm;
 use ServiceLaundry\Dashboard\Models\Web\Users;
 use ServiceLaundry\Order\Models\Web\Service;
 use Phalcon\Mvc\Controller;
@@ -12,7 +13,8 @@ use Phalcon\Http\Response;
 
 class AuthenticationController extends SecureController
 {
-    private $message = "";
+    public $msg_error      = array();
+    public $msg_success    = array();
 
     public function initialize()
     {
@@ -27,8 +29,11 @@ class AuthenticationController extends SecureController
     
     public function createLoginAction()
     {
-        $this->view->form       = new LoginForm();
-        $this->view->flash      = $this->flash; 
+        $this->view->form           = new LoginForm();
+        $this->view->forms          = new UserForm();
+        $this->view->flash          = $this->flash; 
+        $this->view->msg_success    = $msg_success;
+        $this->view->msg_error      = $msg_error;
         $this->view->pick('views/createLogin');
     }
 
@@ -80,6 +85,77 @@ class AuthenticationController extends SecureController
         }
     }
 
+    public function storeUserAction()
+    {
+        if(!$this->request->isPost())
+        {
+            $this->response->redirect();
+        }
+
+        $form = new UserForm();
+        if($this->request->getPost('gender') == null)
+        {
+            array_push($msg_error,'Anda harus mengisi jenis kelamin');
+            $this->response->redirect("login");
+        }
+
+        $username = $this->request->getPost('username');
+        if(Users::findFirst("username='$username'"))
+        {
+            array_push($msg_error,'Username sudah digunakan');
+            $this->response->redirect("login");
+        }
+
+        $flag = 0;
+        if(!$form->isValid($this->request->getPost()))
+        {
+            foreach ($form->getMessages() as $msg)
+            {
+                if($msg->getMessage()!=null && $msg->getField()!='profile_img')
+                {
+                    $flag = 1;
+                    array_push($msg_error,$msg->getMessage());
+                }
+            }
+        }
+
+        if($this->request->hasFiles() == true && !$flag)
+        {
+            $username       = $this->request->getPost('username');
+            $password       = $this->security->hash($this->request->getPost('password'));
+            $name           = $this->request->getPost('name');
+            $gender         = $this->request->getPost('gender');
+            $address        = $this->request->getPost('address');
+            $register_date  = date('Y-m-d');
+            $role           = 0;
+            $phone          = $this->request->getPost('phone');
+            $email          = $this->request->getPost('email');
+            $profile_img    = "temp.jpg";
+
+            $member = new Users();
+            $member->construct($username,$password,$name,$gender,$address,$register_date,$role,$phone,$email,$profile_img);
+
+            if($member->save())
+            {
+                foreach($this->request->getUploadedFiles() as $file)
+                {
+                    $filename_toDB  = "img_profile/" . $member->getId() . '.' .$file->getExtension();
+                    $save_file      = BASE_PATH . '/public/' . $filename_toDB;
+                    $file->moveTo($save_file);
+                    $member->construct($username,$password,$name,$gender,$address,$register_date,$role,$phone,$email,$filename_toDB);
+                    $member->update();
+                }
+                array_push($msg_success,'Akun Anda berhasil didaftarkan');
+                $this->view->form = new UserForm();
+            }
+            else
+            {
+                array_push($msg_error,'Terjadi kesalahan saat mendaftarkan akun. Mohon, coba ulang kembali');
+            }
+        }
+        return $this->response->redirect("login");
+    }
+
     public function logoutAction()
     {
         unset($this->session->auth);
@@ -88,8 +164,8 @@ class AuthenticationController extends SecureController
 
     public function showAccountAction()
     {
-        $admin_id       = $this->request->getQuery('id');
-        $data           = Users::findFirst("user_id='$admin_id'");
+        $member_id       = $this->request->getQuery('id');
+        $data           = Users::findFirst("user_id='$member_id'");
 
         if(!$this->session->has('auth')) $this->response->redirect("home");
 
@@ -112,8 +188,8 @@ class AuthenticationController extends SecureController
         }
 
         $user_id        = $this->request->getPost('user_id');
-        $admin          = Users::findFirst("user_id='$user_id'");
-        if($admin == null)
+        $member          = Users::findFirst("user_id='$user_id'");
+        if($member == null)
         {
             $this->flashSession->error('Terjadi error saat pencarian data. Mohon coba ulang kembali');
         }
@@ -126,13 +202,13 @@ class AuthenticationController extends SecureController
             $phone      = $this->request->getPost('phone');
             $email      = $this->request->getPost('email');
 
-            $register_date  = $admin->getRegisterDate();
-            $role           = $admin->getRole();
-            $profile_img    = $admin->getProfileImg();
-            $password       = $admin->getPassword();
+            $register_date  = $member->getRegisterDate();
+            $role           = $member->getRole();
+            $profile_img    = $member->getProfileImg();
+            $password       = $member->getPassword();
 
-            $admin->construct($username,$password,$name,$gender,$address,$register_date,$role,$phone,$email,$profile_img);
-            if($admin->update())
+            $member->construct($username,$password,$name,$gender,$address,$register_date,$role,$phone,$email,$profile_img);
+            if($member->update())
             {
                 $this->flashSession->success("Data diri berhasil diperbarui");
             }
@@ -141,7 +217,7 @@ class AuthenticationController extends SecureController
                 $this->flashSession->error("Data diri tidak berhasil diperbarui");
             }
         }
-        $this->response->redirect('profile?id='.$admin->getId());
+        $this->response->redirect('profile?id='.$member->getId());
     }
 
     public function changePasswordAction()
@@ -152,30 +228,30 @@ class AuthenticationController extends SecureController
         }
 
         $user_id        = $this->request->getPost('user_id');
-        $admin          = Users::findFirst("user_id='$user_id'");
+        $member          = Users::findFirst("user_id='$user_id'");
         $old_password   = $this->request->getPost('old_password');
 
-        if($this->security->checkHash($old_password, $admin->getPassword()))
+        if($this->security->checkHash($old_password, $member->getPassword()))
         {
-            if($admin == null)
+            if($member == null)
             {
                 $this->flashSession->error('Terjadi error saat pencarian data. Mohon coba ulang kembali');
             }
             else
             {
-                $name           = $admin->getName();
-                $username       = $admin->getUsername();
-                $gender         = $admin->getGender();
-                $address        = $admin->getAddress();
-                $phone          = $admin->getPhone();
-                $email          = $admin->getEmail();
-                $register_date  = $admin->getRegisterDate();
-                $role           = $admin->getRole();
-                $profile_img    = $admin->getProfileImg();
+                $name           = $member->getName();
+                $username       = $member->getUsername();
+                $gender         = $member->getGender();
+                $address        = $member->getAddress();
+                $phone          = $member->getPhone();
+                $email          = $member->getEmail();
+                $register_date  = $member->getRegisterDate();
+                $role           = $member->getRole();
+                $profile_img    = $member->getProfileImg();
 
                 $password       = $this->security->hash($this->request->getPost('new_password'));
-                $admin->construct($username,$password,$name,$gender,$address,$register_date,$role,$phone,$email,$profile_img);
-                if($admin->update())
+                $member->construct($username,$password,$name,$gender,$address,$register_date,$role,$phone,$email,$profile_img);
+                if($member->update())
                 {
                     $this->flashSession->success("Password berhasil diganti");
                 }
@@ -185,7 +261,7 @@ class AuthenticationController extends SecureController
                 }
             }
         }
-        $this->response->redirect('profile?id='.$admin->getId());
+        $this->response->redirect('profile?id='.$member->getId());
     }
 
     public function changeProfilImageAction()
@@ -195,24 +271,24 @@ class AuthenticationController extends SecureController
             $this->response->redirect('profile?='.$this->session->get('auth')['id']);
         }
         $user_id        = $this->request->getPost('user_id');
-        $admin          = Users::findFirst("user_id='$user_id'");
+        $member          = Users::findFirst("user_id='$user_id'");
 
-        if($admin==null)
+        if($member==null)
         {
             $this->flashSession->error('Terjadi error saat pencarian data. Mohon coba ulang kembali');
         }
         else
         {
-            $old_file       = BASE_PATH . '/public/' .$admin->getProfileImg();
-            $name           = $admin->getName();
-            $username       = $admin->getUsername();
-            $gender         = $admin->getGender();
-            $address        = $admin->getAddress();
-            $phone          = $admin->getPhone();
-            $email          = $admin->getEmail();
-            $register_date  = $admin->getRegisterDate();
-            $role           = $admin->getRole();
-            $password       = $admin->getPassword();
+            $old_file       = BASE_PATH . '/public/' .$member->getProfileImg();
+            $name           = $member->getName();
+            $username       = $member->getUsername();
+            $gender         = $member->getGender();
+            $address        = $member->getAddress();
+            $phone          = $member->getPhone();
+            $email          = $member->getEmail();
+            $register_date  = $member->getRegisterDate();
+            $role           = $member->getRole();
+            $password       = $member->getPassword();
 
             if(!unlink($old_file))
             {
@@ -225,12 +301,12 @@ class AuthenticationController extends SecureController
                     $filename_toDB  = 'img_profile/' .$user_id. '.' .$file->getExtension();
                     $save_file      = BASE_PATH . '/public/' .$filename_toDB;
                     $file->moveTo($save_file);
-                    $admin->construct($username,$password,$name,$gender,$address,$register_date,$role,$phone,$email,$filename_toDB);
-                    $admin->update();
+                    $member->construct($username,$password,$name,$gender,$address,$register_date,$role,$phone,$email,$filename_toDB);
+                    $member->update();
                 }
                 $this->flashSession->success("Profil gambar berhasil diperbarui");
             }
         }
-        $this->response->redirect('profile?id='.$admin->getId());
+        $this->response->redirect('profile?id='.$member->getId());
     }
 }

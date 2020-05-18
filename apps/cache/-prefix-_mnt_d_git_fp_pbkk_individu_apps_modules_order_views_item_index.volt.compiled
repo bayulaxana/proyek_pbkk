@@ -109,9 +109,9 @@
                                     <div class="card-body">
                                         <img src=<?= $s->getItemPhoto() ?> class="service" style="height:150px;">
                                         <h4 class="card-title text-center"><?= $s->getItemType() ?></h4>
-                                        <p class="text-center"><b>Rp. <?= $s->getItemDetails() ?></b><p>
-                                        <input type="button" value="Ubah Item">
-                                        <input type="button" value="Hapus Item">
+                                        <p class="text-center"><b><?= $s->getItemDetails() ?></b><p>
+                                        <a href="#editItemModal" class="btn btn-primary" data-toggle="modal">Ubah Item</a>
+                                        <a href="#deleteItemModal" class="set-hidden btn btn-danger" data-toggle="modal" value="<?= $s->getId() ?>">Hapus Item</a>
                                     </div>
                                 </div>
                             </div>
@@ -139,6 +139,47 @@
     </main>
 </div>
 
+<div id="deleteItemModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form  action="item" method="POST">
+                <div class="modal-header">						
+                    <h4 class="modal-title">Hapus Item</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">				
+                    <input type='hidden' value='' name='item_id' id='item_id'>
+                    <p>Apakah Anda yakin untuk menghapus data yang telah dipilih ?</p>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Batal">
+                    <input type="submit" class="btn btn-danger" value="Hapus">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--<div id="editItemModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form  action="edit/item" method="POST">
+                <div class="modal-header">						
+                    <h4 class="modal-title">Ubah Item</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">				
+                    <input type='hidden' value='' name='item_id' id='item_id'>
+                    <p>Apakah Anda yakin untuk menghapus data yang telah dipilih ?</p>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-default" data-dismiss="modal" value="Batal">
+                    <input type="submit" class="btn btn-danger" value="Hapus">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>-->
 
 	<div class="clearfix bottom-content">
 		<div class="row" style="position: relative; margin-top:10vh; width: 100%; color: white"> 

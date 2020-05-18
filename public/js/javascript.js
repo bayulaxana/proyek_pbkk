@@ -55,6 +55,11 @@ $(document).ready(function(){
         $('#Simpan').prop('disabled',false);
     });
 
+    //set-hidden
+    $(".set-hidden").click(function(){
+        $('#item_id').val($(this).attr('value')); 
+    });
+
     //hide
     setTimeout(function(){
         $(document).on('click','#hides',function(){

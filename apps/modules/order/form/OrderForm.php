@@ -10,8 +10,6 @@ use Phalcon\Forms\Element\TextArea;
 use Phalcon\Forms\Element\Submit;
 use Phalcon\Forms\Element\Date;
 
-use Phalcon\Tag;
-
 use Phalcon\Validation;
 use Phalcon\Validation\Validator\PresenceOf;
 

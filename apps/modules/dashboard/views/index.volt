@@ -42,7 +42,6 @@
                 </div>
             </div>
             <div class="row">
-               
                 <div class="col-sm">
                 <div class="card chart">
                     <div width=100 style="height:36vh">

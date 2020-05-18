@@ -5,6 +5,10 @@ $container['router'] = function() use ($defaultModule, $modules) {
 	$router = new \Phalcon\Mvc\Router(false);
 	$router->clear();
 
+	/*
+	* Still Manual Routing
+	*/
+
 	/**
 	 * Default Routing
 	 */
@@ -278,7 +282,7 @@ $container['router'] = function() use ($defaultModule, $modules) {
 		'action'		=> 'updatePickupDelivery'
 	]);
 
-	/*Cek User Routing */ 
+	/*Cek User Routing*/ 
 	$router->addGet('/item',[
 		'namespace'		=> 'ServiceLaundry\Order\Controllers\Web',
 		'module'		=> 'order',
@@ -291,6 +295,27 @@ $container['router'] = function() use ($defaultModule, $modules) {
 		'module'		=> 'order',
 		'controller'	=> 'UserOrder',
 		'action'		=> 'listOrder'
+	]);
+
+	$router->addPost('/item',[
+		'namespace'		=> 'ServiceLaundry\Order\Controllers\Web',
+		'module'		=> 'order',
+		'controller'	=> 'Item',
+		'action'		=> 'delete'
+	]);
+
+	$router->addPost('/item',[
+		'namespace'		=> 'ServiceLaundry\Order\Controllers\Web',
+		'module'		=> 'order',
+		'controller'	=> 'Item',
+		'action'		=> 'delete'
+	]);
+
+	$router->addPost('/store/user',[
+		'namespace'		=> 'ServiceLaundry\Dashboard\Controllers\Web',
+		'module'		=> 'dashboard',
+		'controller'	=> 'Authentication',
+		'action'		=> 'storeUser'
 	]);
 	
     $router->removeExtraSlashes(true);

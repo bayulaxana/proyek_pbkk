@@ -61,8 +61,12 @@
                             <a class="nav-link text-light" href="<?= $this->url->get('payment') ?>">Pembayaran</a>
                         </li>
                     <?php } else { ?>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" href="<?= $this->url->get('order/users') ?>">Pesanan</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pesanan</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="<?= $this->url->get('order/users') ?>">Tambah Pesanan</a>
+                                <a class="dropdown-item" href="<?= $this->url->get('/listorder') ?>">Daftar Pesanan</a>
+                            </div>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-light" href="<?= $this->url->get('item') ?>">Item</a>
