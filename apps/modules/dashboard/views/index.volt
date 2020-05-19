@@ -9,13 +9,12 @@
         <div id="hides" class="notif-block" style="height:4vh;  overflow-y: auto;">{{flashSession.output()}}</div>
             <input type="hidden" class="dates" value="{% for a in chart %}{{a['dates']}},{% endfor %}">
             <input type="hidden" class="totals" value="{% for b in chart %}{{b['total']}},{% endfor %}">
-            <h2 class="text-center text-secondary"><span class="text-danger">Selamat Datang</span> 
-            <br>di Halaman Dashboard</h2>
+            <h2 class="text-center text-secondary"><span class="text-danger">Dashboard</span> </h2>
             <hr id="line">
             <div class="row">
                 <div class="col-sm">
-                    <div class="card shadow" style="height:18vh; background-color:#7ffadc">
-                        <p class="text-center"><b>Pendapatan Hari Ini</b></p>
+                    <div class="card shadow" style="padding: 20px; background-color:#7ffadc">
+                        <h4 class="text-center"><b>Pendapatan Hari Ini</b></h4>
                         <div class="row">
                             <div class="col-sm-8"><h2 class="text-center">{{income}}</h2></div>
                             <div class="col-sm text-left"><img src={{url('assets/money.png')}} alt="money" style="height:10vh;"></div>
@@ -23,8 +22,8 @@
                     </div>
                 </div>
                 <div class="col-sm">
-                    <div class="card shadow" style="height:18vh; background-color:#facf7f">
-                        <p class="text-center"><b>Pesanan Masuk</b></p>
+                    <div class="card shadow" style="padding: 20px; background-color:#facf7f">
+                        <h4 class="text-center"><b>Pesanan Masuk</b></h4>
                         <div class="row">
                             <div class="col-sm-8"><h2 class="text-center">{{unprocessed_order}}</h2></div>
                             <div class="col-sm text-left"><img src={{url('assets/trolli.png')}} alt="trolli" style="height:10vh;"></div>
@@ -32,8 +31,8 @@
                     </div>
                 </div>
                 <div class="col-sm">
-                   <div class="card shadow" style="height:18vh; background-color:#ccfa7f">
-                        <p class="text-center"><b>Pesanan Selesai</b></p>
+                   <div class="card shadow" style="padding: 20px; background-color:#ccfa7f">
+                        <h4 class="text-center"><b>Pesanan Selesai</b></h4>
                         <div class="row">
                             <div class="col-sm-8"><h2 class="text-center">{{completed_order}}</h2></div>
                             <div class="col-sm text-left"><img src={{url('assets/finish.png')}} alt="finish" style="height:10vh;"></div>

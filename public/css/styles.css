@@ -8,8 +8,8 @@
 }
 
 body {
-    background-image: url('../assets/background.jpg');
-    background-repeat: no-repeat;
+    background-image: url('../assets/bg2.jpg');
+    background-repeat: repeat-y;
     background-position: center;
     background-size: cover ;
     width: 100%;
@@ -137,13 +137,14 @@ span.tag.badge.badge-info:hover{
 }
 .table-title {        
     padding-bottom: 15px;
-    background: #435d7d;
+    background: #1a69c9;
     color: #fff;
     padding: 16px 30px;
     margin: -20px -25px 10px;
     border-radius: 3px 3px 0 0;
 }
 .table-title h2 {
+    color: white;
     margin: 5px 0 0;
     font-size: 24px;
 }
