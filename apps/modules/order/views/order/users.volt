@@ -7,7 +7,7 @@
     <main id="main-container" style="padding-top: 5vw">
         <div class="content" style="padding-top: 0">
         <div id="hides" class="notif-block" style="height:5vh;  overflow-y: auto;">{{flashSession.output()}}</div>
-            <div class="table-wrapper" style="height:70vh">
+            <div class="table-wrapper" style="">
             <form action="users" method="POST" enctype="multipart/form-data">
             <div class="table-title">
                 <div class="row">
@@ -66,9 +66,10 @@
                     </div>
                 </div>
             </div>
-            <div class="row" style="float:right">
-                <a id="changes" class="btn btn-info text-light" style="margin-right:15px"><span>Simpan Perubahan</span></a>		
-                <input type="submit" class="btn btn-success" name="Simpan" id="Simpan" value="Kirim" disabled>		
+            <div class="row">
+                <div class="text-right">
+                    <a id="changes" class="btn btn-primary text-light" style="margin-right:15px"><span>Simpan Perubahan</span></a>		
+                    <input type="submit" class="btn btn-success" name="Simpan" id="Simpan" value="Kirim" disabled>		
                 </div>
             </div>
             </form>
