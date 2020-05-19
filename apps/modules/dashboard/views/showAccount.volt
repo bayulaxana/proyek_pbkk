@@ -11,7 +11,7 @@
 <main id="main-container">
 <div id="hides" class="notif-block" style="height:5vh;  overflow-y: auto;">{{flashSession.output()}}</div>
 <div class="row-centered">
-	<div class="card login-card" style="margin-left:25vw; margin-top:15vh">
+	<div class="card pb-4 login-card" style="margin-left:25vw; margin-top:15vh">
         <img class="avatar" src={{data.getProfileImg()}}>
 		<h1 class="text-center text-secondary profil">Profil
             {% if session.get('auth')['role'] == 1 %} 

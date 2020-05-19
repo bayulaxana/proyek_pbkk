@@ -13,7 +13,7 @@
             <hr id="line">
             <div class="row">
                 <div class="col-sm">
-                    <div class="card shadow" style="padding: 20px; background-color:#7ffadc">
+                    <div class="card shadow" style="padding: 20px; background-color:#73e8ff">
                         <h4 class="text-center"><b>Pendapatan Hari Ini</b></h4>
                         <div class="row">
                             <div class="col-sm-8"><h2 class="text-center">{{income}}</h2></div>
@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 <div class="col-sm">
-                    <div class="card shadow" style="padding: 20px; background-color:#facf7f">
+                    <div class="card shadow" style="padding: 20px; background-color:#ffee58">
                         <h4 class="text-center"><b>Pesanan Masuk</b></h4>
                         <div class="row">
                             <div class="col-sm-8"><h2 class="text-center">{{unprocessed_order}}</h2></div>
@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div class="col-sm">
-                   <div class="card shadow" style="padding: 20px; background-color:#ccfa7f">
+                   <div class="card shadow" style="padding: 20px; background-color:#b0ff57">
                         <h4 class="text-center"><b>Pesanan Selesai</b></h4>
                         <div class="row">
                             <div class="col-sm-8"><h2 class="text-center">{{completed_order}}</h2></div>
