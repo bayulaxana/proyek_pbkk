@@ -54,6 +54,10 @@
                         <p><b>Kami mencuci dengan menggunakan mesin modern sehingga menghasilkan pakaian yang bersih dan cepat selesai.</b></p>
                     </div>
                 </div>
+                <div class="card-footer text-center">
+                    <h3>Masuk untuk mengelola</h3>
+                    <a href="{{ url('login') }}" class="btn btn-primary btn-lg" style="min-width: 200px; max-width: 100%;">Login</a>
+                </div>
             </div>
             <div class="card shadow my-3">
                 <div class="card-header">

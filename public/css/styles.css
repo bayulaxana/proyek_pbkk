@@ -59,12 +59,14 @@ body {
     z-index: 999;
 }
 
-
 .card.login-card {
     height:27vw;
-    margin-top: 12vh;
-    margin-left:20vw;
-    width:50%;
+    /* margin-top: 12vh;
+    margin-left:20vw; */
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
+    width:70%;
     font-size: 1vw;
     box-shadow: black;
     background-color: #eafdff;
