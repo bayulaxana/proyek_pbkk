@@ -44,9 +44,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="floats">
-			<img src="{{url('assets/login.png')}}" style="height:80vh">
-		</div>
+		
 	</div>
 </div>
 
