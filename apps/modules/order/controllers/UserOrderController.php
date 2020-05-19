@@ -74,39 +74,37 @@ class UserOrderController extends SecureController
 
     public function listOrderAction()
     {
-        $user_id              = $this->session->get('auth')['id'];
+        $user_id        = $this->session->get('auth')['id'];
+        $array_data     = array();
+        (!isset($_GET['page'])) ? $currentPage = 1 : $currentPage = (int) $this->request->getQuery('page');
+        $number_page    = 3;
+        $offset         = ($currentPage-1) * $number_page;
+        $total_row      = count(Orders::find());
+        $total_page     = ceil($total_row/$number_page);
+
         $queries = $this
         ->modelsManager
-        ->createQuery("SELECT service_name, order_id, order_total, order_date, finish_date, order_status 
+        ->createQuery("SELECT service_name, Orders.order_id AS order_id, order_total, order_date, finish_date, order_status
                         FROM ServiceLaundry\Order\Models\Web\Service AS Services, ServiceLaundry\Order\Models\Web\Orders AS Orders 
-                        WHERE Services.service_id = Orders.service_id AND Orders.user_id = '$user_id'");
-
+                        WHERE Services.service_id = Orders.service_id AND Orders.user_id =".$user_id);
         $temps      = $queries->execute();
         $sql        = $temps->toArray();
 
-        /*Pagination*/
+        $detail_item    = array();
+        $i = 0;
+        foreach( $sql as $idx)
+        {
+            $query = $this
+                    ->modelsManager
+                    ->createQuery('SELECT comment_id, comment_content, comment_status FROM ServiceLaundry\Order\Models\Web\Comment AS Comment
+                                    WHERE Comment.order_id = ' .$idx['order_id']);
+            $temp             = $query->execute();
+            $detail_item[$i]  = $temp->toArray();   
+            $i++;
+        }
 
-
-        
-        /*
-        * Get all items for every orders
-        */
-        // $detail_item    = array();
-        // $i = 0;
-        // foreach( $sql as $idx)
-        // {
-        //     $query = $this
-        //             ->modelsManager
-        //             ->createQuery("SELECT item_type, item_details FROM ServiceLaundry\Order\Models\Web\Item AS Item , ServiceLaundry\Order\Models\Web\OrderItem AS OrderItem
-        //                             WHERE Item.item_id = OrderItem.item_id 
-        //                             AND OrderItem.order_id =" .$idx['Orders_order_id']);
-        //     $temp             = $query->execute();
-        //     $detail_item[$i]  = $temp->toArray();   
-        //     $i++;
-        // }
-
-        $this->view->page    = $sql;
-        $this->view->details = $detail_item;
+        $this->view->page            = $sql;
+        $this->view->detail_item     = $detail_item;
         $this->view->pick('views/order/listorder');
     }
 }

@@ -64,7 +64,9 @@ class AuthenticationController extends SecureController
                     $this->cookies->send();
                     setcookie("remember", $remCookies, (86400 * 15), '/');
                 }
-                $user->getRole()==1 ? (new Response())->redirect()->send() :  (new Response())->redirect("home")->send();
+                if($user->getRole()==1) (new Response())->redirect()->send();
+                else if($user->getRole()==0) (new Response())->redirect("dashboard/user")->send();
+                else (new Response())->redirect("home")->send();
             }
             else{
                 $this->security->hash(rand());

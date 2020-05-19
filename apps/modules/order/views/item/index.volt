@@ -21,8 +21,8 @@
                                     <div class="card-body">
                                         <img src={{s.getItemPhoto()}} class="service" style="height:150px;">
                                         <h4 class="card-title text-center">{{s.getItemType()}}</h4>
-                                        <p class="text-center"><b>{{s.getItemDetails()}}</b><p>
-                                        <a href="#editItemModal" class="btn btn-primary" data-toggle="modal">Ubah Item</a>
+                                        <p class="text-center"><b>{{s.getItemDetail()}}</b><p>
+                                        <a href="#editItemModal{{s.getId()}}" class="btn btn-primary" data-toggle="modal">Ubah Item</a>
                                         <a href="#deleteItemModal" class="set-hidden btn btn-danger" data-toggle="modal" value="{{s.getId()}}">Hapus Item</a>
                                     </div>
                                 </div>
@@ -72,24 +72,37 @@
     </div>
 </div>
 
-<!--<div id="editItemModal" class="modal fade">
+{% for t in items %}
+<div id="editItemModal{{t.getId()}}" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form  action="edit/item" method="POST">
+            <form  action="update/item" method="POST" enctype="multipart/form-data">
                 <div class="modal-header">						
                     <h4 class="modal-title">Ubah Item</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
-                <div class="modal-body">				
-                    <input type='hidden' value='' name='item_id' id='item_id'>
-                    <p>Apakah Anda yakin untuk menghapus data yang telah dipilih ?</p>
+                <div class="modal-body">
+                    <input type="hidden" id="item_id" name="item_id" value="{{t.getId()}}">
+                    <div class="form-group">
+                        <label><b>Detail Item</b></label>
+                        <p><input type="text" class="form-control" name="item_details" id="item_details" value="{{t.getItemDetail()}}"></p>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Tipe Item</b></label>
+                        <p><input type="text" class="form-control" name="item_type" id="item_type" value="{{t.getItemType()}}"></p>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Tipe Item</b></label>
+                        <p><input type="file" class="form-control" name="item_photo" id="item_photo"></p>
+                    </div>							
                 </div>
                 <div class="modal-footer">
                     <input type="button" class="btn btn-default" data-dismiss="modal" value="Batal">
-                    <input type="submit" class="btn btn-danger" value="Hapus">
+                    <input type="submit" class="btn btn-success" id="Simpan" nama="Simpan" value="Simpan">
                 </div>
             </form>
         </div>
     </div>
-</div>-->
+</div>
+{% endfor %}
 {% endblock %}

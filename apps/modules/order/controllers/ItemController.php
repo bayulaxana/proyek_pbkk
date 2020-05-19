@@ -4,6 +4,7 @@ namespace ServiceLaundry\Order\Controllers\Web;
 
 use ServiceLaundry\Common\Controllers\SecureController;
 use ServiceLaundry\Order\Models\Web\Item;
+use ServiceLaundry\Order\Forms\Web\ItemForm;
 use ServiceLaundry\Order\Models\Web\OrderItem;
 use ServiceLaundry\Dashboard\Models\Web\Users;
 use Phalcon\Mvc\Controller;
@@ -64,9 +65,9 @@ class ItemController extends SecureController
             if($item != null && $this->request->hasFiles() == true)
             {
                 $old_file      = BASE_PATH . '/public/' .$item->getItemPhoto();
-                $item_name     = $this->request->getPost('item_name');
-                $item_price    = $this->request->getPost('item_price');
-                $item_photo    = $item->getItemPhoto();
+                $user_id       = $this->session->get('auth')['id'];
+                $item_details  = $this->request->getPost('item_details');
+                $item_type     = $this->request->getPost('item_type');
 
                 if(!unlink($old_file))
                 {
@@ -79,7 +80,7 @@ class ItemController extends SecureController
                         $filename_toDB  = 'img_item/' .$item_id. '.' .$file->getExtension();
                         $save_file      = BASE_PATH . '/public/' .$filename_toDB;
                         $file->moveTo($save_file);
-                        $item->construct($item_name,$filename_toDB,$item_price);
+                        $item->construct($user_id,$item_details,$item_type,$filename_toDB);
                         $item->update();
                     }
                     $this->flashSession->success('Data Item berhasil diperbarui');

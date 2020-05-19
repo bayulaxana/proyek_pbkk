@@ -2,6 +2,7 @@
 namespace ServiceLaundry\Order\Controllers\Web;
 
 use ServiceLaundry\Common\Controllers\SecureController;
+use ServiceLaundry\Order\Forms\Web\CommentForm;
 use ServiceLaundry\Dasboard\Models\Web\Users;
 use ServiceLaundry\Order\Models\Web\Service;
 use ServiceLaundry\Order\Models\Web\Comment;
@@ -20,7 +21,7 @@ class CommentController extends SecureController
     {
         if(!$this->request->isPost())
         {
-            return $this->response->redirect('order');
+            return $this->response->redirect('listorder');
         }
 
         $form = new CommentForm();
@@ -37,44 +38,83 @@ class CommentController extends SecureController
             }
         }
 
-        $admin_id       = $this->session->get('auth')['id'];
-        $order_id       = $this->request->getPost('order_id');
-        $payment_status = $this->request->getPost('payment_status');
-        $payment_time   = date('Y-m-d');
+        $user_id                = $this->session->get('auth')['id'];
+        $comment_content        = $this->request->getPost('comment_content');
+        $comment_status         = $this->request->getPost('comment_status');
+        $comment_date           = date('Y-m-d');
+        $order_id               = $this->request->getPost('order_id');
 
-        $payment = new Payment();
-        $payment->construct($order_id,$admin_id,$payment_status,$payment_time);
+        $comment = new Comment();
+        $comment->construct($user_id,$comment_content,$comment_status,$comment_date,$order_id);
 
         if(!$flag)
         {
-            if($payment->save())
+            if($comment->save())
             {
-                $this->flashSession->success('Data Pembayaran berhasil ditambahkan');
-                if($payment_status == 'Lunas')
-                {
-                    $order = Orders::findFirst(['conditions'=>'order_id='.$order_id]);
-                    $order->construct($order->getServiceId(),$order->getUserId(),$order->getOrderTotal(),$order->getOrderDate(),$order->getFinishDate(),'Finished');
-                    $order->update();
-                }
+                $this->flashSession->success('Data Komentar berhasil ditambahkan');
             }
             else
             {
                 $this->flashSession->error('Terjadi kesalahan saat menambahkan data. Mohon, coba ulang kembali');
             }
         }
-        return $this->response->redirect('order');
+        return $this->response->redirect('listorder');
     }
 
     public function updateAction()
     {
+        if(!$this->request->isPost())
+        {
+            $this->response->redirect('listorder');
+        }
 
+        $form = new CommentForm();
+        $flag = 0;
+        if(!$form->isValid($this->request->getPost()))
+        {
+            foreach ($form->getMessages() as $msg)
+            {
+                if($msg->getMessage()!=null && $msg->getField()!='order_id')
+                {
+                    $flag = 1;
+                    $this->flashSession->error($msg->getMessage());
+                }
+            }
+        }
+
+        $comment_id   = $this->request->getPost('comment_id');
+        $comment      = Comment::findFirst("comment_id='$comment_id'");
+
+        if($comment != null && !$flag)
+        {
+            $user_id            = $this->session->get('auth')['id'];
+            $comment_content    = $this->request->getPost('comment_content');
+            $comment_status     = $this->request->getPost('comment_status');
+            $comment_date       = date('Y-m-d');
+            $order_id           = $this->request->getPost('order_id');
+    
+            $comment->construct($user_id,$comment_content,$comment_status,$comment_date,$order_id);
+            if($comment->update())
+            {
+                $this->flashSession->success('Data Pembayaran berhasil diubah');
+            }
+            else
+            {
+                $this->flashSession->error('Data Pembayaran tidak berhasil diubah. Mohon coba ulang kembali');
+            }
+        }
+        else
+        {
+            $this->flashSession->error('Data yang dipilih tidak ada. Mohon coba ulang kemabali');
+        }
+        return $this->response->redirect('listorder');
     }
 
     public function deleteAction()
     {
         if(!$this->request->isPost())
         {
-            return $this->response->redirect('order');
+            return $this->response->redirect('listorder');
         }
         $comment_id = $this->request->getPost('comment_id');
         if($comment_id != null)
@@ -84,14 +124,14 @@ class CommentController extends SecureController
             {
                 if($comment->delete())
                 {
-                    $this->flashSession->success('Data comment berhasil dihapus');
+                    $this->flashSession->success('Data komentar berhasil dihapus');
                 }
                 else
                 {
-                    $this->flashSession->error('Data comment tidak berhasil dihapus. Mohon coba ulang kembali');
+                    $this->flashSession->error('Data komentar tidak berhasil dihapus. Mohon coba ulang kembali');
                 }
             }
         }
-        return $this->response->redirect('order');
+        return $this->response->redirect('listorder');
     }
 }

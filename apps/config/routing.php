@@ -304,11 +304,11 @@ $container['router'] = function() use ($defaultModule, $modules) {
 		'action'		=> 'delete'
 	]);
 
-	$router->addPost('/item',[
+	$router->addPost('/update/item',[
 		'namespace'		=> 'ServiceLaundry\Order\Controllers\Web',
 		'module'		=> 'order',
 		'controller'	=> 'Item',
-		'action'		=> 'delete'
+		'action'		=> 'update'
 	]);
 
 	$router->addPost('/store/user',[
@@ -316,6 +316,34 @@ $container['router'] = function() use ($defaultModule, $modules) {
 		'module'		=> 'dashboard',
 		'controller'	=> 'Authentication',
 		'action'		=> 'storeUser'
+	]);
+
+	$router->addPost('/add/comment',[
+		'namespace'		=> 'ServiceLaundry\Order\Controllers\Web',
+		'module'		=> 'order',
+		'controller'	=> 'Comment',
+		'action'		=> 'store'
+	]);
+
+	$router->addPost('/update/comment',[
+		'namespace'		=> 'ServiceLaundry\Order\Controllers\Web',
+		'module'		=> 'order',
+		'controller'	=> 'Comment',
+		'action'		=> 'update'
+	]);
+
+	$router->addPost('/delete/comment',[
+		'namespace'		=> 'ServiceLaundry\Order\Controllers\Web',
+		'module'		=> 'order',
+		'controller'	=> 'Comment',
+		'action'		=> 'delete'
+	]);
+
+	$router->addGet('/dashboard/user',[
+		'namespace'		=> 'ServiceLaundry\Dashboard\Controllers\Web',
+		'module'		=> 'dashboard',
+		'controller'	=> 'IndexUser',
+		'action'		=> 'index'
 	]);
 	
     $router->removeExtraSlashes(true);

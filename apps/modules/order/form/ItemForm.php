@@ -2,6 +2,8 @@
 
 namespace ServiceLaundry\Order\Forms\Web;
 
+use ServiceLaundry\Common\Forms\BaseForm;
+
 use Phalcon\Forms\Element\File;
 use Phalcon\Forms\Element\Hidden;
 use Phalcon\Forms\Element\Password;
@@ -35,7 +37,7 @@ class ItemForm extends BaseForm
             new PresenceOf(['message' => 'Anda harus menuliskan tipe item anda'])
         ]);
 
-        $itemImage = new File('item_image');
+        $itemImage = new File('item_photo');
         $itemImage->setLabel('Unggah foto item');
         
         $this->add($itemDetails);
