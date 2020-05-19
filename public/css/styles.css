@@ -11,7 +11,8 @@ body {
     background-image: url('../assets/bg2.jpg');
     background-repeat: repeat-y;
     background-position: center;
-    background-size: cover ;
+    background-size: cover;
+    background-attachment: fixed;
     width: 100%;
 }
 
