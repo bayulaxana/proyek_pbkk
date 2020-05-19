@@ -24,5 +24,6 @@
 			</div>
 		</div> 
 	</div>
+	<script type="text/javascript" src="{{ url("js/navbar.js") }}"></script>
 </body>
 </html>
